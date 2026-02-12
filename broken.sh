@@ -200,7 +200,7 @@ update_script() {
 }
 
 # -----------------------------
-# AI Chat (.ai) – requires AI_API_KEY
+# AI Chat (.ai) – OpenAI style (optional)
 # -----------------------------
 ai_chat() {
     if [ -z "$AI_API_KEY" ]; then
@@ -220,6 +220,17 @@ ai_chat() {
 
     MSG=$(echo "$RESP" | grep -oP '"content":\s*"\K[^"]+')
     echo -e "${GREEN}AI:${NC} $MSG"
+}
+
+# -----------------------------
+# Nexray AI (.ai2)
+# -----------------------------
+ai2() {
+    TEXT="$*"
+    [ -z "$TEXT" ] && { echo -e "${YELLOW}Usage: .ai2 Hello${NC}"; return; }
+
+    RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$TEXT" | sed 's/ /%20/g')")
+    echo -e "${CYAN}🤖 AI2:${NC} $RESP"
 }
 
 # -----------------------------
@@ -489,6 +500,57 @@ qr_gen() {
 }
 
 # -----------------------------
+# Nexray TikTok Photo (.tiktok)
+# -----------------------------
+tiktok_photo() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .tiktok Zuchu${NC}"; return; }
+
+    RESP=$(curl -s "https://api.nexray.web.id/search/tiktokphoto?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${PINK}📸 TikTok Photos:${NC}"
+    echo "$RESP"
+}
+
+# -----------------------------
+# Nexray YouTube Search (.youtube)
+# -----------------------------
+youtube_search() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .youtube Zuchu${NC}"; return; }
+
+    RESP=$(curl -s "https://api.nexray.web.id/search/youtube?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${GREEN}🎬 YouTube Results:${NC}"
+    echo "$RESP"
+}
+
+# -----------------------------
+# Nexray Wikipedia Search (.wiki)
+# -----------------------------
+wiki_search() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .wiki Zuchu${NC}"; return; }
+
+    RESP=$(curl -s "https://api.nexray.web.id/search/wikipedia?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${CYAN}📚 Wikipedia Info:${NC}"
+    echo "$RESP"
+}
+
+# -----------------------------
+# Nexray YouTube MP4 Downloader (.ytmp4)
+# -----------------------------
+ytmp4() {
+    URL="$*"
+    [ -z "$URL" ] && { echo -e "${YELLOW}Usage: .ytmp4 https://youtube.com/watch?v=...${NC}"; return; }
+
+    ENCODED=$(printf '%s' "$URL" | sed 's/:/%3A/g; s/\//%2F/g; s/?/%3F/g; s/=/%3D/g; s/&/%26/g')
+
+    RESP=$(curl -s "https://api.nexray.web.id/downloader/ytmp4?url=$ENCODED&resolusi=2160")
+
+    echo -e "${GREEN}🎥 Download Info:${NC}"
+    echo "$RESP"
+}
+
+# -----------------------------
 # MAIN UI
 # -----------------------------
 header
@@ -542,8 +604,9 @@ EOF
 echo ""
 echo -e "${YELLOW}📢 Commands:${NC}"
 echo -e "${GREEN}.help .weather .ip .device .joke .quote .hackmode .matrix .music .playlist .update"
-echo -e ".ai .translate .scanpkg .status .lookup .pass .hash .banner .speed"
-echo -e ".8ball .love .fact .battery .vibrate .torch .notify .geo .usersearch .qr .exit${NC}"
+echo -e ".ai .ai2 .translate .scanpkg .status .lookup .pass .hash .banner .speed"
+echo -e ".8ball .love .fact .battery .vibrate .torch .notify .geo .usersearch .qr"
+echo -e ".tiktok .youtube .wiki .ytmp4 .exit${NC}"
 echo ""
 
 footer
@@ -562,12 +625,13 @@ while true; do
             echo ".weather  | .ip       | .device"
             echo ".joke     | .quote    | .hackmode | .matrix"
             echo ".music    | .playlist | .update"
-            echo ".ai       | .translate from to text"
+            echo ".ai       | .ai2      | .translate from to text"
             echo ".scanpkg  | .status url | .lookup ip"
             echo ".pass len | .hash text | .banner text"
             echo ".speed    | .8ball    | .love a b | .fact"
             echo ".battery  | .vibrate  | .torch on/off | .notify msg"
             echo ".geo      | .usersearch name | .qr text"
+            echo ".tiktok q | .youtube q | .wiki q | .ytmp4 url"
             echo ".exit${NC}"
         ;;
         .weather)      weather ;;
@@ -581,6 +645,7 @@ while true; do
         .playlist)     playlist ;;
         .update)       update_script ;;
         .ai)           ai_chat $args ;;
+        .ai2)          ai2 $args ;;
         .translate)    translate_text $args ;;
         .scanpkg)      scanpkg $args ;;
         .status)       status_check $args ;;
@@ -599,6 +664,10 @@ while true; do
         .geo)          geo_info ;;
         .usersearch)   usersearch $args ;;
         .qr)           qr_gen $args ;;
+        .tiktok)       tiktok_photo $args ;;
+        .youtube)      youtube_search $args ;;
+        .wiki)         wiki_search $args ;;
+        .ytmp4)        ytmp4 $args ;;
         .exit)
             echo -e "${RED}👋 Exiting... Stay Broken, Stay Royal.${NC}"
             exit 0
