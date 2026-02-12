@@ -1,63 +1,172 @@
 #!/bin/bash
 
+# ============================================
+#   🌸 BROKEN LORD (VI) — Premium Bash UI
+#   Developer: broken lord
+#   GitHub: github.com/lordpremo
+# ============================================
+
 clear
 
-echo "╔════════════════════════════════════════╗"
-echo "║ 🌸🌼🌺  broken lord (VI)  🌺🌼🌸 ║"
-echo "╚════════════════════════════════════════╝"
+# -----------------------------
+# Colors
+# -----------------------------
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+PINK='\033[1;35m'
+NC='\033[0m' # No Color
+
+# -----------------------------
+# Loading Animation
+# -----------------------------
+loading() {
+    echo -ne "${YELLOW}🔄 Loading"
+    for i in {1..5}; do
+        echo -ne "."
+        sleep 0.3
+    done
+    echo -e "${NC}"
+}
+
+# -----------------------------
+# Detect User Location & Local Time
+# -----------------------------
+GEO=$(curl -s https://ipapi.co/json)
+
+CITY=$(echo $GEO | grep -oP '"city":\s*"\K[^"]+')
+COUNTRY=$(echo $GEO | grep -oP '"country_name":\s*"\K[^"]+')
+TIMEZONE=$(echo $GEO | grep -oP '"timezone":\s*"\K[^"]+')
+
+LOCAL_TIME=$(TZ="$TIMEZONE" date +"%d/%m/%Y @%H:%M:%S")
+
+CITY=${CITY:-"Unknown City"}
+COUNTRY=${COUNTRY:-"Unknown Country"}
+TIMEZONE=${TIMEZONE:-"UTC"}
+LOCAL_TIME=${LOCAL_TIME:-$(date +"%d/%m/%Y @%H:%M:%S")}
+
+# -----------------------------
+# Header Function
+# -----------------------------
+header() {
+    clear
+    echo -e "${PINK}╔════════════════════════════════════════╗"
+    echo -e "║ 🌸🌼🌺  broken lord (VI)  🌺🌼🌸 ║"
+    echo -e "╚════════════════════════════════════════╝${NC}"
+    echo ""
+}
+
+# -----------------------------
+# Footer Function
+# -----------------------------
+footer() {
+    YEAR=$(date +"%Y")
+    echo ""
+    echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo -e "🌸 ©2025–$YEAR | Made by broken lord"
+    echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+# -----------------------------
+# System Info
+# -----------------------------
+system_info() {
+    echo -e "${CYAN}💻 System: $(uname -o)"
+    echo -e "🧠 Kernel: $(uname -r)"
+    echo -e "📦 Shell: $SHELL${NC}"
+    echo ""
+}
+
+# -----------------------------
+# Main UI
+# -----------------------------
+header
+loading
+
+echo -e "${GREEN}🌷 Hello 👋 and welcome!"
+echo -e "I'm broken lord 😁${NC}"
 echo ""
 
-echo "🌷 𝐇𝐞𝐥𝐥𝐨 👋 𝐚𝐧𝐝 𝐰𝐞𝐥𝐜𝐨𝐦𝐞!"
-echo "𝐈'𝐦 𝐛𝐫𝐨𝐤𝐞𝐧 𝐥𝐨𝐫𝐝 😁"
+echo -e "${PINK}🌹 Do you have a girlfriend,"
+echo -e "or should I be one 🥺😩?${NC}"
 echo ""
 
-echo "🌹 𝐃𝐨 𝐲𝐨𝐮 𝐡𝐚𝐯𝐞 𝐚 𝐠𝐢𝐫𝐥𝐟𝐫𝐢𝐞𝐧𝐝,"
-echo "𝐨𝐫 𝐬𝐡𝐨𝐮𝐥𝐝 𝐈 𝐛𝐞 𝐨𝐧𝐞 🥺😩?"
+echo -e "${CYAN}🌼 I'm here to help you out"
+echo -e "with my abilities below ✨${NC}"
 echo ""
 
-echo "🌼 𝐈'𝐦 𝐡𝐞𝐫𝐞 𝐭𝐨 𝐡𝐞𝐥𝐩 𝐲𝐨𝐮 𝐨𝐮𝐭"
-echo "𝐰𝐢𝐭𝐡 𝐦𝐲 𝐚𝐛𝐢𝐥𝐢𝐭𝐢𝐞𝐬 𝐛𝐞𝐥𝐨𝐰 ✨"
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# Auto date
-DATE=$(date +"%d/%m/%Y @%H:%M")
-echo "⏱️ 𝐔𝐩𝐭𝐢𝐦𝐞: ★0𝐡𝐨𝐮𝐫𝐬.1𝐦𝐢𝐧.58𝐬𝐞𝐜"
-echo "📅 𝐃𝐚𝐭𝐞: ★$DATE"
-echo "📍 𝐍𝐚𝐢𝐫𝐨𝐛𝐢 🌆 🏙️"
+echo -e "📍 Location: $CITY, $COUNTRY"
+echo -e "⏰ Local Time: $LOCAL_TIME"
+echo -e "🕒 Timezone: $TIMEZONE"
 echo ""
 
-echo "👨‍💻 𝐃𝐞𝐯: 𝐛𝐫𝐨𝐤𝐞𝐧 𝐥𝐨𝐫𝐝"
-echo "🔗 𝐆𝐢𝐭𝐇𝐮𝐛: github.com/lordpremo"
+echo -e "👨‍💻 Dev: broken lord"
+echo -e "🔗 GitHub: github.com/lordpremo"
 echo ""
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "⠄⠄⠄⠄⠄⠄⠄⠄⣀⣠⣤⣤⣤⣄⡀⠄⠄⠄"
-echo "⠄⠄⠄⠄⠄⠄⣴⣿⣿⣿⡿⣿⡿⣗⢌⢳⡀⠄"
-echo "⠄⠄⠄⠄⠄⣼⣿⡇⣿⠹⡸⡹⣷⡹⡎⣧⢳⠄"
-echo "⠄⠄⠄⠄⠄⣿⣿⠱⡙⠰⣢⡱⢹⡇⡷⢸⢸⠄"
-echo "⠄⠄⠄⠄⠄⢿⢸⡈⣉⣤⠠⣴⡄⡇⠁⠄⢸⠄"
-echo "⠄⠄⠄⠄⠄⠸⡆⡃⡙⢍⣹⡿⢓⠄⠤⣐⡟⠄"
-echo "⠄⠄⠄⠄⠄⠄⠙⠾⠾⠮⣵⢸⡔⢷⣍⠉⠄⠄"
-echo "⠄⠄⠄⠄⢀⣴⣾⣿⣷⡺⡋⢞⣎⣚⣛⣳⣴⣶"
-echo "⠄⠄⠄⠄⢘⣛⣩⣾⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿"
-echo "⠄⠄⣀⠺⣿⣿⣿⠟⣡⣾⠿⢿⣿⣿⡎⢋⠻⣿"
-echo "⠄⠄⣉⣠⣿⣿⡏⣼⣿⠁⠶⠄⣿⣿⡇⡼⠄⠈"
-echo "⠄⠄⣈⠻⠿⠟⢁⠘⢿⣷⣶⣾⣿⠟⡰⠃⠄⠄"
-echo "⠄⣴⣿⣧⢻⣿⣿⣷⣦⣬⣉⣩⣴⠞⠁⠄⠄⠄"
-echo "⠄⠘⠿⠿⢸⣿⣿⣿⣿⣿⣿⣿⠁⠄⠄⠄⠄⠄"
-echo "⠄⢤⡝⣧⢸⣿⣿⣿⣿⣿⣿⠟⠄⠄⠄⠄⠄⠄"
-echo "⣜⢧⠻⣀⢿⣿⣿⣿⣿⣿⠏⣾⣧⡀⠄⠄⠄⠄"
-echo "⠹⢂⣾⣿⠸⣿⣿⣿⣿⡏⣼⣿⣿⣷⠄⠄⠄⠄"
-echo "⠄⣿⣿⣿⣧⠹⣿⢻⡿⢰⣿⣿⣿⣿⣇⠄⠄⠄"
-echo "⢸⣿⣿⣿⣿⣇⢹⢸⢁⣿⣿⣿⣿⣿⣿⡆⠄⠄"
-echo "⢸⣿⣿⣿⣿⣿⣆⠄⣿⣿⣿⣿⣿⣿⣿⡇⠄⠄"
-echo "⠸⣿⣿⣿⣿⣿⣿⠄⢿⣿⣿⣿⣿⣿⣿⡇⠄⠄"
+system_info
+
+echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+# ASCII Art
+cat << "EOF"
+⠄⠄⠄⠄⠄⠄⠄⠄⣀⣠⣤⣤⣤⣄⡀⠄⠄⠄
+⠄⠄⠄⠄⠄⠄⣴⣿⣿⣿⡿⣿⡿⣗⢌⢳⡀⠄
+⠄⠄⠄⠄⠄⣼⣿⡇⣿⠹⡸⡹⣷⡹⡎⣧⢳⠄
+⠄⠄⠄⠄⠄⣿⣿⠱⡙⠰⣢⡱⢹⡇⡷⢸⢸⠄
+⠄⠄⠄⠄⠄⢿⢸⡈⣉⣤⠠⣴⡄⡇⠁⠄⢸⠄
+⠄⠄⠄⠄⠄⠸⡆⡃⡙⢍⣹⡿⢓⠄⠤⣐⡟⠄
+⠄⠄⠄⠄⠄⠄⠙⠾⠾⠮⣵⢸⡔⢷⣍⠉⠄⠄
+⠄⠄⠄⠄⢀⣴⣾⣿⣷⡺⡋⢞⣎⣚⣛⣳⣴⣶
+⠄⠄⠄⠄⢘⣛⣩⣾⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿
+⠄⠄⣀⠺⣿⣿⣿⠟⣡⣾⠿⢿⣿⣿⡎⢋⠻⣿
+⠄⠄⣉⣠⣿⣿⡏⣼⣿⠁⠶⠄⣿⣿⡇⡼⠄⠈
+⠄⠄⣈⠻⠿⠟⢁⠘⢿⣷⣶⣾⣿⠟⡰⠃⠄⠄
+⠄⣴⣿⣧⢻⣿⣿⣷⣦⣬⣉⣩⣴⠞⠁⠄⠄⠄
+⠄⠘⠿⠿⢸⣿⣿⣿⣿⣿⣿⣿⠁⠄⠄⠄⠄⠄
+⠄⢤⡝⣧⢸⣿⣿⣿⣿⣿⣿⠟⠄⠄⠄⠄⠄⠄
+⣜⢧⠻⣀⢿⣿⣿⣿⣿⣿⠏⣾⣧⡀⠄⠄⠄⠄
+⠹⢂⣾⣿⠸⣿⣿⣿⣿⡏⣼⣿⣿⣷⠄⠄⠄⠄
+⠄⣿⣿⣿⣧⠹⣿⢻⡿⢰⣿⣿⣿⣿⣇⠄⠄⠄
+⢸⣿⣿⣿⣿⣇⢹😍⢸⢁⣿⣿⣿⣿⣿⣿⡆⠄⠄
+⢸⣿⣿⣿⣿⣿⣆⠄⣿⣿⣿⣿⣿⣿⣿⡇⠄⠄
+⠸⣿⣿⣿⣿⣿⣿⠄⢿⣿⣿⣿⣿⣿⣿⡇⠄⠄
+EOF
+
 echo ""
-echo "🌸 ©𝟐𝟎𝟐𝟓–𝟐𝟎𝟐𝟔 | 𝐌𝐚𝐝𝐞 𝐛𝐲 𝐛𝐫𝐨𝐤𝐞𝐧 𝐥𝐨𝐫𝐝"
+echo -e "${YELLOW}📢 Reply with .help for command list"
+echo -e "📲 https://whatsapp.com/channel/0029VbCHdGo7j6g5YVppfd2J${NC}"
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "📢 Reply with .help for command list"
-echo "📲 https://whatsapp.com/channel/0029VbCHdGo7j6g5YVppfd2J"
-echo ""
+
+footer
+
+# -----------------------------
+# Command Handler
+# -----------------------------
+while true; do
+    echo ""
+    read -p "👉 Enter command: " cmd
+
+    case $cmd in
+        .help)
+            echo -e "${GREEN}📜 Commands:"
+            echo "  .help  - Show this menu"
+            echo "  .about - About Broken Lord"
+            echo "  .exit  - Quit program${NC}"
+        ;;
+        .about)
+            echo -e "${PINK}👑 KING LORD BROKEN — Developer, Designer, Visionary${NC}"
+        ;;
+        .exit)
+            echo -e "${RED}👋 Exiting... Stay Broken, Stay Royal.${NC}"
+            exit 0
+        ;;
+        *)
+            echo -e "${RED}❌ Unknown command. Type .help${NC}"
+        ;;
+    esac
+done
