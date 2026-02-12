@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ============================================
-#   🌸 BROKEN LORD (VI) — GOD MODE Bash UI
+#   🌸 BROKEN LORD (VI) — GOD MODE++ Bash UI
 #   Developer: broken lord
 #   GitHub: github.com/lordpremo
 # ============================================
@@ -223,14 +223,49 @@ ai_chat() {
 }
 
 # -----------------------------
-# Nexray AI (.ai2)
+# Nexray AI (.ai2 / .ai3 / helpers)
 # -----------------------------
 ai2() {
     TEXT="$*"
     [ -z "$TEXT" ] && { echo -e "${YELLOW}Usage: .ai2 Hello${NC}"; return; }
-
     RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$TEXT" | sed 's/ /%20/g')")
     echo -e "${CYAN}🤖 AI2:${NC} $RESP"
+}
+
+ai3() {
+    TEXT="$*"
+    [ -z "$TEXT" ] && { echo -e "${YELLOW}Usage: .ai3 your prompt${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$TEXT" | sed 's/ /%20/g')")
+    echo -e "${GREEN}🤖 AI3:${NC} $RESP"
+}
+
+summarize_text() {
+    TEXT="$*"
+    [ -z "$TEXT" ] && { echo -e "${YELLOW}Usage: .summarize long text${NC}"; return; }
+    PROMPT="Summarize this in short points: $TEXT"
+    RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$PROMPT" | sed 's/ /%20/g')")
+    echo -e "${CYAN}📝 Summary:${NC} $RESP"
+}
+
+rewrite_text() {
+    TEXT="$*"
+    [ -z "$TEXT" ] && { echo -e "${YELLOW}Usage: .rewrite text${NC}"; return; }
+    PROMPT="Rewrite this in a cooler style: $TEXT"
+    RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$PROMPT" | sed 's/ /%20/g')")
+    echo -e "${PINK}✍ Rewrite:${NC} $RESP"
+}
+
+translate2() {
+    LANG="$1"
+    shift
+    TEXT="$*"
+    if [ -z "$LANG" ] || [ -z "$TEXT" ]; then
+        echo -e "${YELLOW}Usage: .translate2 sw Hello there${NC}"
+        return
+    fi
+    PROMPT="Translate this to $LANG: $TEXT"
+    RESP=$(curl -s "https://api.nexray.web.id/ai/copilot?text=$(echo "$PROMPT" | sed 's/ /%20/g')")
+    echo -e "${CYAN}🌍 Translation:${NC} $RESP"
 }
 
 # -----------------------------
@@ -551,6 +586,202 @@ ytmp4() {
 }
 
 # -----------------------------
+# EXTRA SYSTEM COMMANDS
+# -----------------------------
+ram_info() {
+    echo -e "${CYAN}📦 RAM Usage:${NC}"
+    free -h
+}
+
+cpu_info() {
+    echo -e "${CYAN}🧠 CPU Info:${NC}"
+    lscpu 2>/dev/null || cat /proc/cpuinfo
+}
+
+storage_info() {
+    echo -e "${CYAN}💾 Storage:${NC}"
+    df -h
+}
+
+process_list() {
+    echo -e "${CYAN}📋 Top Processes:${NC}"
+    ps aux | head -n 15
+}
+
+kill_process() {
+    PID="$1"
+    if [ -z "$PID" ]; then
+        echo -e "${YELLOW}Usage: .kill PID${NC}"
+        return
+    fi
+    kill "$PID" && echo -e "${GREEN}✔ Killed process $PID${NC}" || echo -e "${RED}❌ Failed to kill $PID${NC}"
+}
+
+wifi_info() {
+    echo -e "${YELLOW}⚠ WiFi info not directly accessible on Termux.${NC}"
+    echo -e "${CYAN}Tip:${NC} Tumia app ya system kuangalia WiFi details."
+}
+
+# -----------------------------
+# FUN EXTRAS
+# -----------------------------
+horoscope() {
+    SIGN="$1"
+    [ -z "$SIGN" ] && { echo -e "${YELLOW}Usage: .horoscope aries${NC}"; return; }
+    echo -e "${CYAN}🔮 Horoscope for $SIGN:${NC}"
+    curl -s "https://aztro.sameerkumar.website/?sign=$SIGN&day=today" -X POST
+}
+
+roast() {
+    TARGET="$*"
+    [ -z "$TARGET" ] && TARGET="you"
+    MSGS=("You're like a bug in production: nobody knows why you're here."
+          "If laziness was a sport, you'd still come late to the game."
+          "You're the human version of 'low battery'.")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${PINK}🔥 Roast for $TARGET:${NC} ${MSGS[$IDX]}"
+}
+
+pickup() {
+    MSGS=("Are you WiFi? Because I'm feeling a strong connection."
+          "Do you debug? Because you just fixed my bad day."
+          "Are you a terminal? Because I can't stop typing your name.")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${PINK}💘 Pickup line:${NC} ${MSGS[$IDX]}"
+}
+
+truth_cmd() {
+    MSGS=("What is your biggest fear?"
+          "Who was your last crush?"
+          "What is one thing you regret?")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${CYAN}🧠 TRUTH:${NC} ${MSGS[$IDX]}"
+}
+
+dare_cmd() {
+    MSGS=("Text your friend 'I have a secret 👀'."
+          "Change your WhatsApp status to 'BROKEN LORD OWNS ME' for 10 minutes."
+          "Send a voice note laughing for 10 seconds straight.")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${CYAN}🎲 DARE:${NC} ${MSGS[$IDX]}"
+}
+
+insult() {
+    MSGS=("You're not stupid; you just have bad luck thinking."
+          "If brains were RAM, you'd be 128MB."
+          "You're like a semicolon in Bash: mostly unnecessary.")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${RED}💢 Insult:${NC} ${MSGS[$IDX]}"
+}
+
+compliment() {
+    MSGS=("Your vibe is premium, like a paid tool in a world of trials."
+          "You debug life better than most debug code."
+          "If confidence was a script, you'd be GOD MODE.")
+    IDX=$((RANDOM % ${#MSGS[@]}))
+    echo -e "${GREEN}🌟 Compliment:${NC} ${MSGS[$IDX]}"
+}
+
+# -----------------------------
+# Nexray / API EXTRA
+# -----------------------------
+lyrics_search() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .lyrics song name${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/search/lyrics?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${CYAN}🎵 Lyrics Result:${NC}"
+    echo "$RESP"
+}
+
+movie_search() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .movie movie name${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/search/movie?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${GREEN}🎬 Movie Result:${NC}"
+    echo "$RESP"
+}
+
+news_search() {
+    Q="$*"
+    [ -z "$Q" ] && Q="technology"
+    RESP=$(curl -s "https://api.nexray.web.id/search/news?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${CYAN}📰 News:${NC}"
+    echo "$RESP"
+}
+
+anime_search() {
+    Q="$*"
+    [ -z "$Q" ] && { echo -e "${YELLOW}Usage: .anime name${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/search/anime?q=$(echo "$Q" | sed 's/ /%20/g')")
+    echo -e "${PINK}🎌 Anime:${NC}"
+    echo "$RESP"
+}
+
+currency_convert() {
+    FROM="$1"
+    TO="$2"
+    AMOUNT="$3"
+    if [ -z "$FROM" ] || [ -z "$TO" ] || [ -z "$AMOUNT" ]; then
+        echo -e "${YELLOW}Usage: .currency USD TZS 10${NC}"
+        return
+    fi
+    RESP=$(curl -s "https://api.exchangerate.host/convert?from=$FROM&to=$TO&amount=$AMOUNT")
+    RES=$(echo "$RESP" | grep -oP '"result":\s*\K[0-9.]+')
+    echo -e "${CYAN}💱 $AMOUNT $FROM = $RES $TO${NC}"
+}
+
+dictionary_lookup() {
+    WORD="$1"
+    [ -z "$WORD" ] && { echo -e "${YELLOW}Usage: .dict word${NC}"; return; }
+    RESP=$(curl -s "https://api.dictionaryapi.dev/api/v2/entries/en/$WORD")
+    echo -e "${CYAN}📖 Dictionary for '$WORD':${NC}"
+    echo "$RESP"
+}
+
+weather2() {
+    CITYQ="$*"
+    [ -z "$CITYQ" ] && CITYQ="$CITY"
+    W=$(curl -s "https://wttr.in/$CITYQ?format=3")
+    echo -e "${CYAN}🌦 Weather: $W${NC}"
+}
+
+# -----------------------------
+# Downloaders EXTRA
+# -----------------------------
+ytmp3() {
+    URL="$*"
+    [ -z "$URL" ] && { echo -e "${YELLOW}Usage: .ytmp3 https://youtube.com/watch?v=...${NC}"; return; }
+    ENCODED=$(printf '%s' "$URL" | sed 's/:/%3A/g; s/\//%2F/g; s/?/%3F/g; s/=/%3D/g; s/&/%26/g')
+    RESP=$(curl -s "https://api.nexray.web.id/downloader/ytmp3?url=$ENCODED")
+    echo -e "${GREEN}🎧 YTMP3:${NC}"
+    echo "$RESP"
+}
+
+tiktokdl() {
+    URL="$*"
+    [ -z "$URL" ] && { echo -e "${YELLOW}Usage: .tiktokdl url${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/downloader/tiktok?url=$(echo "$URL" | sed 's/ /%20/g')")
+    echo -e "${PINK}🎥 TikTok Download:${NC}"
+    echo "$RESP"
+}
+
+instadl() {
+    URL="$*"
+    [ -z "$URL" ] && { echo -e "${YELLOW}Usage: .instadl url${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/downloader/instagram?url=$(echo "$URL" | sed 's/ /%20/g')")
+    echo -e "${CYAN}📸 Instagram Download:${NC}"
+    echo "$RESP"
+}
+
+fbdl() {
+    URL="$*"
+    [ -z "$URL" ] && { echo -e "${YELLOW}Usage: .fbdl url${NC}"; return; }
+    RESP=$(curl -s "https://api.nexray.web.id/downloader/facebook?url=$(echo "$URL" | sed 's/ /%20/g')")
+    echo -e "${BLUE}📘 Facebook Download:${NC}"
+    echo "$RESP"
+}
+
+# -----------------------------
 # MAIN UI
 # -----------------------------
 header
@@ -602,11 +833,15 @@ cat << "EOF"
 EOF
 
 echo ""
-echo -e "${YELLOW}📢 Commands:${NC}"
-echo -e "${GREEN}.help .weather .ip .device .joke .quote .hackmode .matrix .music .playlist .update"
-echo -e ".ai .ai2 .translate .scanpkg .status .lookup .pass .hash .banner .speed"
+echo -e "${YELLOW}📢 Commands (main):${NC}"
+echo -e "${GREEN}.help .weather .weather2 .ip .device .joke .quote .hackmode .matrix .music .playlist .update"
+echo -e ".ai .ai2 .ai3 .summarize .rewrite .translate .translate2"
+echo -e ".scanpkg .status .lookup .pass .hash .banner .speed"
 echo -e ".8ball .love .fact .battery .vibrate .torch .notify .geo .usersearch .qr"
-echo -e ".tiktok .youtube .wiki .ytmp4 .exit${NC}"
+echo -e ".tiktok .youtube .wiki .ytmp4 .ytmp3 .tiktokdl .instadl .fbdl"
+echo -e ".ram .cpu .storage .ps .kill .wifi"
+echo -e ".horoscope .roast .pickup .truth .dare .insult .compliment"
+echo -e ".lyrics .movie .news .anime .currency .dict${NC}"
 echo ""
 
 footer
@@ -622,19 +857,27 @@ while true; do
         .help)
             echo -e "${GREEN}📜 Commands:"
             echo ".help"
-            echo ".weather  | .ip       | .device"
+            echo ".weather  | .weather2 [city] | .ip | .device"
             echo ".joke     | .quote    | .hackmode | .matrix"
             echo ".music    | .playlist | .update"
-            echo ".ai       | .ai2      | .translate from to text"
+            echo ".ai       | .ai2      | .ai3"
+            echo ".summarize text | .rewrite text"
+            echo ".translate from to text | .translate2 lang text"
             echo ".scanpkg  | .status url | .lookup ip"
             echo ".pass len | .hash text | .banner text"
             echo ".speed    | .8ball    | .love a b | .fact"
             echo ".battery  | .vibrate  | .torch on/off | .notify msg"
             echo ".geo      | .usersearch name | .qr text"
-            echo ".tiktok q | .youtube q | .wiki q | .ytmp4 url"
+            echo ".tiktok q | .youtube q | .wiki q"
+            echo ".ytmp4 url | .ytmp3 url | .tiktokdl url | .instadl url | .fbdl url"
+            echo ".ram | .cpu | .storage | .ps | .kill PID | .wifi"
+            echo ".horoscope sign | .roast [name] | .pickup"
+            echo ".truth | .dare | .insult | .compliment"
+            echo ".lyrics q | .movie q | .news [q] | .anime q | .currency FROM TO AMOUNT | .dict word"
             echo ".exit${NC}"
         ;;
         .weather)      weather ;;
+        .weather2)     weather2 $args ;;
         .ip)           show_ip ;;
         .device)       device_info ;;
         .joke)         joke ;;
@@ -644,9 +887,15 @@ while true; do
         .music)        music ;;
         .playlist)     playlist ;;
         .update)       update_script ;;
+
         .ai)           ai_chat $args ;;
         .ai2)          ai2 $args ;;
+        .ai3)          ai3 $args ;;
+        .summarize)    summarize_text $args ;;
+        .rewrite)      rewrite_text $args ;;
         .translate)    translate_text $args ;;
+        .translate2)   translate2 $args ;;
+
         .scanpkg)      scanpkg $args ;;
         .status)       status_check $args ;;
         .lookup)       ip_lookup $args ;;
@@ -654,9 +903,11 @@ while true; do
         .hash)         hash_gen $args ;;
         .banner)       banner $args ;;
         .speed)        speed_test ;;
+
         .8ball)        eight_ball ;;
         .love)         love_calc $args ;;
         .fact)         fact ;;
+
         .battery)      battery ;;
         .vibrate)      vibrate ;;
         .torch)        torch $args ;;
@@ -664,10 +915,38 @@ while true; do
         .geo)          geo_info ;;
         .usersearch)   usersearch $args ;;
         .qr)           qr_gen $args ;;
+
         .tiktok)       tiktok_photo $args ;;
         .youtube)      youtube_search $args ;;
         .wiki)         wiki_search $args ;;
         .ytmp4)        ytmp4 $args ;;
+        .ytmp3)        ytmp3 $args ;;
+        .tiktokdl)     tiktokdl $args ;;
+        .instadl)      instadl $args ;;
+        .fbdl)         fbdl $args ;;
+
+        .ram)          ram_info ;;
+        .cpu)          cpu_info ;;
+        .storage)      storage_info ;;
+        .ps)           process_list ;;
+        .kill)         kill_process $args ;;
+        .wifi)         wifi_info ;;
+
+        .horoscope)    horoscope $args ;;
+        .roast)        roast $args ;;
+        .pickup)       pickup ;;
+        .truth)        truth_cmd ;;
+        .dare)         dare_cmd ;;
+        .insult)       insult ;;
+        .compliment)   compliment ;;
+
+        .lyrics)       lyrics_search $args ;;
+        .movie)        movie_search $args ;;
+        .news)         news_search $args ;;
+        .anime)        anime_search $args ;;
+        .currency)     currency_convert $args ;;
+        .dict)         dictionary_lookup $args ;;
+
         .exit)
             echo -e "${RED}👋 Exiting... Stay Broken, Stay Royal.${NC}"
             exit 0
