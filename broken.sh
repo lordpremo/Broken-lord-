@@ -71,7 +71,8 @@ footer() {
 # -----------------------------
 # System Info
 # -----------------------------
-system -e "${CYAN}💻 System: $(uname -o)"
+system_info() {
+    echo -e "${CYAN}💻 System: $(uname -o)"
     echo -e "🧠 Kernel: $(uname -r)"
     echo -e "📦 Shell: $SHELL${NC}"
     echo ""
@@ -97,7 +98,7 @@ show_ip() {
 # Device Info
 # -----------------------------
 device_info() {
-    echo -e "${YELLOW}📱 Device Info:"
+    echo -e "${YELLOW}📱 Device Info:${NC}"
     uname -a
 }
 
@@ -113,9 +114,10 @@ joke() {
 # Random Quote
 # -----------------------------
 quote() {
-    Q=$(curl -s https://api.quotable.io/random | grep -oP '"content":\s*"\K[^"]+')
-    A=$(curl -s https://api.quotable.io/random | grep -oP '"author":\s*"\K[^"]+')
-    echo -e "${CYAN}💬 Quote: \"$Q\" — $A${NC}"
+    DATA=$(curl -s https://api.quotable.io/random)
+    Q=$(echo "$DATA" | grep -oP '"content":\s*"\K[^"]+')
+    A=$(echo "$DATA" | grep -oP '"author":\s*"\K[^"]+')
+    echo -e "${CYAN}💬 \"$Q\" — $A${NC}"
 }
 
 # -----------------------------
@@ -141,7 +143,7 @@ matrix() {
 }
 
 # -----------------------------
-# Music Player (Your MP3)
+# Music Player
 # -----------------------------
 music() {
     echo -e "${PINK}🎵 Playing Broken Lord Theme...${NC}"
@@ -154,7 +156,7 @@ music() {
 # -----------------------------
 update_script() {
     echo -e "${YELLOW}⬆ Updating script from GitHub...${NC}"
-    curl -s -L https://raw.githubusercontent.com/lordpremo/brokenlord/main/brokenlord.sh -o $0
+    curl -s -L https://raw.githubusercontent.com/lordpremo/brokenlord/main/broken.sh -o $0
     echo -e "${GREEN}✔ Updated successfully! Restart script.${NC}"
 }
 
